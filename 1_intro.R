@@ -1,8 +1,6 @@
 ### -- Introduction and refreshers for R
 ### -- By - Matt Boone (2015) & Auriel Fournier (2015)
 ### -- Modified by Auriel Fournier for 2016 NAOC Workshop
-
-
 ### -- https://github.com/aurielfournier/AOSSCO17  
 
 #######################################
@@ -132,7 +130,7 @@ mgap %>%
 # or
 
 mgap %>% 
-  separate(year, sep=c(-4,-3), 
+  separate(year, sep=c(2,3), 
            into=c("century","y1","y2")) %>%
   mutate(century=as.numeric(century),
          year = as.numeric(y1))
@@ -193,8 +191,7 @@ gapminder %>%
   filter(year==2002) %>%
   group_by(continent) %>%
   sample_n(2) %>%
-  #assign("countries_selected",.) %>%
-  group_by(country, continent) %>%
+  group_by(continent) %>%
   summarize(mean=mean(lifeExp)) %>%
   arrange(., desc(continent))
 
@@ -250,17 +247,6 @@ ct - earlytime
 ##as well as logical statements
 ct > earlytime
 ct == earlytime
-
-######################
-## GREPL
-####################
-grepl('Af',gapminder$country) # returns TRUE and FALSEs, which we can feed into filter()
-
-gapminder %>%
-    filter(grepl("Af", country)) %>% summary()
-
-gapminder %>%
-  filter(grepl('^Af',country)) %>% summary()
 
 #####################################
 ## CHALLENGE
