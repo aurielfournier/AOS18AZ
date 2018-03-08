@@ -247,9 +247,3 @@ ct - earlytime
 ##as well as logical statements
 ct > earlytime
 ct == earlytime
-
-#####################################
-## CHALLENGE
-#####################################
-
-## Median and Mean Life Exp for all Countiries that being with "Ma" for the years 1990-1997 
