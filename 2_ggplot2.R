@@ -8,7 +8,11 @@ library(ggplot2)
 library(ggthemes)
 library(RColorBrewer)
 library(gridExtra)
-library(gapminder) 
+
+a_states <- c("AR","AZ","AK","AL")
+
+ebird <- read.csv("eBird_workshop.csv") %>%
+            filter(state %in% a_states)
 
 # ggplot2 is built on the grammar of graphics, the idea that any plot can be expressed from the same set of components: 
 
@@ -19,8 +23,8 @@ library(gapminder)
 # The key to understanding ggplot2 is thinking about a figure in layers. This idea may be familiar to you if you have used image editing programs like Photoshop, Illustrator, or Inkscape.
 # Let's start off with an example:
 
-ggplot(data = gapminder, 
-       aes(x = gdpPercap, y = lifeExp))
+ggplot(data = ebird, 
+       aes(x = presence, y = samplesize))
 
 # this gives us a plot, with no data on it, but for a good reason. 
 # we have told ggplot what data we want to use, and what axis we want
@@ -29,8 +33,8 @@ ggplot(data = gapminder,
 # so it gives us the blank canvas
 # so lets add a layer
 
-ggplot(data = gapminder, 
-       aes(x = gdpPercap, y = lifeExp)) +
+ggplot(data = ebird, 
+       aes(x = presence, y = samplesize)) +
   geom_point()
 
 # now we can see the data! huzzah!
@@ -50,14 +54,13 @@ ggplot(data = gapminder,
 # data frame on the x-axis, and the "lifeExp" column on the y-axis. 
 # Notice that we didn't need to explicitly pass `aes` these columns (e.g. `x = gapminder[, "gdpPercap"]`), this is because `ggplot` is smart enough to know to look in the **data** for that column!
 
-# What do we need to change to look at how life expectancy changes over time?  
+# What do we need to change to look at how sample size changes over time?  
 
-ggplot(data = gapminder, 
-       aes(x = year, y = lifeExp)) + 
+ggplot(data = ebird, 
+       aes(x = year, y = samplesize)) + 
   geom_point()
 
-# Hint: the gapminder dataset has a column called "year", which should appear
-# on the x-axis.
+
 
 ### Challenge 2 
 
@@ -67,9 +70,9 @@ ggplot(data = gapminder,
 # code from the previous challenge to **color** the points by the "continent"
 # column. What trends do you see in the data? Are they what you expected?
 
-ggplot(data = gapminder, 
-       aes(x = year, y = lifeExp,
-           color=continent)) + 
+ggplot(data = ebird, 
+       aes(x = year, y = samplesize,
+           color=state)) + 
   geom_point()
 
 
@@ -81,10 +84,11 @@ ggplot(data = gapminder,
 #Using a scatterplot probably isn't the best for visualising change over time.
 #Instead, let's tell `ggplot` to visualise the data as a line plot:
   
-ggplot(data = gapminder, 
-       aes(x=year, y=lifeExp, 
-            color=continent)) +
+ggplot(data = ebird, 
+       aes(x=year, y=samplesize)) +
   geom_line()
+
+
 
 #Instead of adding a `geom_point` layer, we've added a `geom_line` layer. 
 # but this probably doesn't look the way we expect
@@ -93,17 +97,17 @@ ggplot(data = gapminder,
 # if we add the **by** *aesthetic*, we will be able to say do each line
 # by country, and see a different chart
 
-ggplot(data = gapminder, 
-       aes(x=year, y=lifeExp, 
-           by=country,color=continent)) +
+ggplot(data = ebird, 
+       aes(x=year, y=samplesize,
+           color=state)) +
   geom_line()
 
 # But what if we want to visualise both lines and points on the plot? 
 # We can simply add another layer to the plot:
   
-ggplot(data = gapminder, 
-       aes(x=year, y=lifeExp, 
-           by=country, color=continent)) +
+ggplot(data = ebird, 
+       aes(x=year, y=samplesize,
+           color=state)) +
   geom_line() + 
   geom_point()
 
@@ -111,10 +115,9 @@ ggplot(data = gapminder,
 #this example, the points have been drawn *on top of* the lines. Here's a
 #demonstration:
   
-ggplot(data = gapminder, 
-       aes(x=year, y=lifeExp, 
-           by=country)) +
-  geom_line(aes(color=continent)) + 
+ggplot(data = ebird, 
+       aes(x=year, y=samplesize)) +
+  geom_line(aes(color=state)) + 
   geom_point()
 
 # In this example, the *aesthetic* mapping of **color** has been moved from the
@@ -129,9 +132,10 @@ ggplot(data = gapminder,
 #  ggplot also makes it easy to overlay statistical models over the data. To
 # demonstrate we'll go back to our first example:
 
-ggplot(data = gapminder, 
-       aes(x = gdpPercap, 
-           y = lifeExp, color=continent)) +
+ggplot(data = ebird, 
+       aes(x = presence, 
+           y = samplesize, 
+           color=state)) +
   geom_point()
 
 # Currently it's hard to see the relationship between the points due to some strong
@@ -141,11 +145,11 @@ ggplot(data = gapminder,
 # points, using the *alpha* funtion, which is especially helpful when you have
 # a large amount of data which is very clustered.
 
-ggplot(data = gapminder, 
-       aes(x = gdpPercap, 
-           y = lifeExp)) +
-  geom_point(alpha = 0.5, 
-             aes(color=continent)) + 
+ggplot(data = ebird, 
+       aes(x = presence, 
+           y = samplesize, 
+           color=state)) +
+  geom_point() + 
   scale_x_log10()  
 
 # The `log10` function applied a transformation to the values of the gdpPercap
@@ -158,19 +162,18 @@ ggplot(data = gapminder,
 # We can fit a simple relationship to the data by adding another layer,
 #`geom_smooth`:
   
-ggplot(data = gapminder, 
-  aes(x = gdpPercap, y = lifeExp)) +
-  geom_point(alpha=0.5) + 
-  scale_x_log10() + 
-  geom_smooth(method="lm", aes(color=continent))
+ggplot(data = ebird, 
+  aes(x = presence, y = samplesize)) +
+  geom_point(alpha=0.5)+
+  geom_smooth(method="lm", aes(color=state))
 
 # We can make the line thicker by *setting* the **size** aesthetic in the
 # `geom_smooth` layer:
   
-ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
-  geom_point() + 
-  scale_x_log10() + 
-  geom_smooth(method="lm", aes(size=continent))
+ggplot(data = ebird, 
+       aes(x = presence, y = samplesize)) +
+  geom_point(alpha=0.5)+
+  geom_smooth(method="lm", aes(color=state), size=2)
 
 # There are two ways an *aesthetic* can be specified. Here we *set* the **size**
 #  aesthetic by passing it as an argument to `geom_smooth`. Previously in the
@@ -179,34 +182,23 @@ ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
 
 # ## Challenge 4a
 
-# Modify the color and size of the points on the point layer in the previous
-# example.
-#
-# Hint: do not use the `aes` function.
+# Make a point graph of sample size by presence where all the points are red. 
 #
 
-ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
-  geom_point(color="red", size=2) + 
-  scale_x_log10() + 
-  geom_smooth(method="lm", size=1.5)
-
+ggplot(data = ebird, 
+       aes(x = samplesize, y = presence)) +
+  geom_point(color="red", size=2) 
 ## Challenge 4b 
 #
-# Modify your solution to Challenge 4a so that the points are now a different shape and are colored by continent.
+# Modify your solution  that the points are now a different shape and are colored by state.
 
-ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
-  geom_point(aes(color=continent, shape=continent), ) + 
-  scale_x_log10() + 
-  geom_smooth(method="lm", size=1.5)
+ggplot(data = ebird, 
+       aes(x = samplesize, y = presence)) +
+  geom_point(size=2, aes(shape=state, color=state)) 
 
 #  Hint: The color argument can be used inside and outside the aesthetic 'aes()'.
 
-# we can also use pipes to deliver our data to ggplot
 
-gapminder %>%
-  filter(year>=1990) %>%
-  ggplot(aes(x = gdpPercap, y = lifeExp)) +
-  geom_point() 
 
 ## Multi-panel figures
 
