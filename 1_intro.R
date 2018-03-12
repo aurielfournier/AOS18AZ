@@ -51,16 +51,16 @@ ebird %>%
 ### -- Match %in%   
 #########################
 
-sub_countries <- c("Afghanistan","Australia", "Zambia")
+sub_state <- c("AZ","NM","NV","CO")
 
+ebird %>%
+          filter(state %in% sub_state) %>% 
+          distinct(state)
 
-gapminder %>%
-          filter(country %in% sub_countries) %>% distinct(country)
+gdat <- ebird %>%
+        filter(state %in% sub_state)
 
-gdat <- gapminder %>%
-  filter(country %in% sub_countries)
-
-distinct(gdat, country)
+distinct(gdat, state)
 
 
 #########################
