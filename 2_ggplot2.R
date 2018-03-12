@@ -207,12 +207,12 @@ ggplot(data = ebird,
 # by adding a layer of **facet** panels. Focusing only on those countries with
 # names that start with the letter "A" or "Z".
 
-ggplot(data=gapminder, 
+ggplot(data=ebird, 
        aes(x = year, 
-           y = lifeExp, 
-           group=country)) +
+           y = samplesize, 
+           group=state, color=state)) +
   geom_line() + 
-  facet_wrap(~continent, ncol=2)
+  facet_wrap(~state, ncol=2)
 
 # The `facet_wrap` layer took a "formula" as its argument, denoted by the tilde
 # (~). This tells R to draw a panel for each unique value in the country column
@@ -229,15 +229,16 @@ ggplot(data=gapminder,
 # for changing the axis labels. To change the legend title, we need to use the
 # **scale** layer.
 
-ggplot(data = gapminder, 
-       aes(x = year, y = lifeExp, group=country,
-           color=continent)) +
-    geom_line() + 
-    facet_wrap( ~continent, ncol=2) +
+ggplot(data=ebird, 
+       aes(x = year, 
+           y = samplesize, 
+           group=state, color=state)) +
+  geom_line() + 
+  facet_wrap(~state, ncol=2) + 
     xlab("Year") + 
-    ylab("Life expectancy") + 
+    ylab("Sample Size") + 
     ggtitle("Figure 1") +
-    scale_colour_discrete(name="Continent") +
+    scale_colour_discrete(name="State") +
     theme_few()
 
 
@@ -257,25 +258,28 @@ ggplot(data = gapminder,
 # OR you can use some pre made themes
 # https://github.com/jrnold/ggthemes
 
-ggplot(data=gapminder, 
+ggplot(data=ebird, 
        aes(x = year, 
-           y = lifeExp, 
-           group=country)) +
-  geom_line()+
+           y = samplesize, 
+           group=state, color=state)) +
+  geom_line() + 
+  facet_wrap(~state, ncol=2)+
   theme_economist()
 
-ggplot(data=gapminder, 
+ggplot(data=ebird, 
        aes(x = year, 
-           y = lifeExp, 
-           group=country)) +
-  geom_line()+
+           y = samplesize, 
+           group=state, color=state)) +
+  geom_line() + 
+  facet_wrap(~state, ncol=2)+
   theme_gdocs()
 
-ggplot(data=gapminder, 
+ggplot(data=ebird, 
        aes(x = year, 
-           y = lifeExp, 
-           group=country)) +
-  geom_line()+
+           y = samplesize, 
+           group=state, color=state)) +
+  geom_line() + 
+  facet_wrap(~state, ncol=2)+
   theme_excel()
 
 ## Custom Themes
@@ -285,27 +289,27 @@ ggplot(data=gapminder,
 # look at the graph below, its pretty visually assualting
 # figure out how to fix it
 
-ggplot(data=gapminder, 
+ggplot(data=ebird, 
        aes(x = year, 
-           y = lifeExp, 
-           group=country)) +
-  geom_line(aes(color=continent), size=0.1)+
-  facet_wrap(~continent)+
+           y = samplesize, 
+           group=state, color=state)) +
+  geom_line() + 
+  facet_wrap(~state, ncol=2)+
   ylab("Life Expectancy")+
-  theme(axis.text.x = element_text(size = 12, ang=90, color = "black"), 
-        axis.text.y = element_text(size = 12, color = "black"), 
+  theme(axis.text.x = element_text(size = 15, ang=90, color = "purple"), 
+        axis.text.y = element_text(size = 2, color = "red"), 
         axis.title.y = element_text(size = 20), 
-        plot.background = element_rect(fill="white"), 
-        panel.background = element_rect(fill="white", color="black"), 
-        panel.grid.major = element_line(colour = NA), 
-        panel.grid.minor = element_line(colour = NA), 
-        title = element_text(size = 20), 
+        plot.background = element_rect(fill="green"), 
+        panel.background = element_rect(fill="red", color="black"), 
+        panel.grid.major = element_line(colour = "red"), 
+        panel.grid.minor = element_line(colour = "purple"), 
+        title = element_text(size = 1), 
 #        axis.line.x = element_line(colour = "black"), 
 #        axis.line.y = element_line(colour = "black"), 
-        strip.background = element_rect(fill = "white", color = "black"), 
-        strip.text = element_text(size = 15, color="black"),
-        legend.background = element_rect(fill="white"),
-        legend.text = element_text(color="black"),
+        strip.background = element_rect(fill = "orange", color = "black"), 
+        strip.text = element_text(size = 15, color="red"),
+        legend.background = element_rect(fill="black"),
+        legend.text = element_text(color="gray"),
         legend.key=element_rect(fill="white"))
   
 
@@ -317,61 +321,55 @@ ggplot(data=gapminder,
   
 display.brewer.all(n=NULL, type="all", select=NULL, exact.n=TRUE,colorblindFriendly=TRUE)
   
-mypalette<-brewer.pal(5,"Greens")
+mypalette<-brewer.pal(4,"Greens")
 
-ggplot(gapminder, aes(x=continent, 
-                      y=lifeExp, 
-                      fill=continent)) + 
+ggplot(data=ebird, 
+       aes(x=state, 
+          y=samplesize, 
+           fill=state)) + 
   geom_boxplot()+ 
   ggtitle("TITLE HERE")+ 
   xlab("text here")+ 
   ylab("text here") + 
   scale_fill_manual(values=mypalette)
 
-mypalette<-brewer.pal(5,"Set2")
+mypalette<-brewer.pal(4,"Set2")
 
 mypalette[2] <- "#000000"
 
-ggplot(gapminder, aes(x=continent, y=lifeExp, 
-                      fill=continent)) + 
+ggplot(data=ebird, 
+       aes(x=state, 
+           y=samplesize, 
+           fill=state)) + 
   geom_boxplot()+ 
   ggtitle("TITLE HERE")+ 
   xlab("text here")+ 
   ylab("text here") + 
   scale_fill_manual(values=mypalette)
 
-# you can always add onto the aesthetics later by adding an additional aes command. 
-ggplot(gapminder, aes(x=gdpPercap, y=lifeExp))+
-  scale_x_log10()+ 
-  aes(color=continent)+
-  geom_point()+
-  geom_smooth(lwd=3, se=F)
 
 ###################################
 ## Saving, Stacking and Rearranging Graphs (gridExtra)
 ###################################
 
-(a <- gapminder %>%
-          filter(continent=="Oceania") %>%
-          ggplot(aes(x=year, y=lifeExp, group=country)) + 
+(a <-   ggplot(data=ebird, 
+               aes(x=year, y=samplesize, group=state)) + 
   geom_line())
 
-(b <- gapminder %>%
-          filter(continent=="Europe") %>%
-          ggplot(aes(x=year, y=gdpPercap,
-                     group=country)) + 
-  geom_line())
+(b <- ggplot(data=ebird, 
+             aes(x=samplesize, y=presence)) + 
+    geom_point())
 
 
-grid.arrange(a,b,a,b,nrow=2)
+c <- grid.arrange(a,b,ncol=2)
 
 #ggsave(a, file="filenamehere.extension")
-ggsave(a, file="~/../Desktop/example_file.jpeg", 
+ggsave(c, file="~/../Desktop/example_file.jpeg", 
        height=4, width=4, units="cm", dpi=600)
 
 
 png("~/../Desktop/x.png", height=12, width=12, units="cm", res=300)
 
-grid.arrange(a,b,a,b,nrow=2)
+grid.arrange(a,b,ncol=2)
 
 dev.off()
