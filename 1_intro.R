@@ -84,10 +84,10 @@ ebird %>%
 # What is the median samplesize and presence for 
 # Arizona, Alaska, Arkansas and Alabama after 2014?
 
-AStates <- c("AZ","AK","AR","AL")
+a_states <- c("AZ","AK","AR","AL")
 
 new_data <- ebird %>% 
-  filter(state %in% AStates,
+  filter(state %in% a_states,
          year > 2014) %>% #distinct(continent)
   group_by(state) %>%
   summarise(medianS = median(samplesize),
@@ -95,26 +95,21 @@ new_data <- ebird %>%
 
 
 #note to self talk about Kiwi vs Us spelling
-# note to self talk about n()
+
+
 #########################
 ## MUTATE
 #########################
 
 colors <- c("red","green")
 
-(mgap <- gapminder %>%  
-  mutate(country_continent = paste0(country,"_",continent),
-         gdp = gdpPercap/pop,
-         favorite_color = 'green',
-         yearfactor = factor(year)) %>%
-   select(year, country_continent, gdp, favorite_color, yearfactor))
 
-# or
+ebird %>%  
+  mutate(a_state = ifelse(state %in% a_states, 1, 0)) %>%
+  select(year, a_state, samplesize, presence, species) %>%
+  tail()
+  
 
-gapminder %>%
-  mutate(example = ifelse(country == "Afghanistan","Yes","No"),
-         n1980s = ifelse(year>=1980&year<=1989,"Yes","No")) %>%
-  select(example, n1980s)
 
 ########################
 ## Separate
