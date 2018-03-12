@@ -67,15 +67,15 @@ distinct(gdat, state)
 ### -- GROUPING
 #########################
 
-gapminder %>%
-  group_by(continent) %>%
-  summarize(nova = mean(lifeExp),
-            median = median(lifeExp))
+ebird %>%
+  group_by(state) %>%
+  summarize(mean = mean(samplesize),
+            median = median(samplesize))
 
 
-gdat <- gapminder %>% 
-  group_by(continent, year) %>%
-  summarize(mean=mean(lifeExp))
+ebird %>% 
+          group_by(state, year) %>%
+          summarize(mean=mean(presence))
 
 #########################################
 ### -- CHALLENGE
