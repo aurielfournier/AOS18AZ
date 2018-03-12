@@ -137,41 +137,62 @@ mebird %>%
 ## Joins
 ########################
 
-# for no reason other than the awesomeness of star wars (bc a bird conference isn't nerdy enough) 
-# we are going to join our data set with another dataset 
-# indicating whether or not the original star wars had been released yet in that year
+cool_birds <- c("Sora","Virginia Rail","Yellow Rail")
 
-star_wars_dat <- data.frame(year=c(unique(gapminder$year)[2:10],2012), 
-                            star_wars_released=c("No","No","No","No","YES","YES","YES","YES","YES","YES"))
+ebird1 <- ebird %>% 
+            filter(state %in% a_states,
+                   species %in% cool_birds) %>%
+            select(species, state, year, samplesize) %>%
+            filter(year >= 2014)
 
-# you will notice this does not include 1952, 2002 and 2007
-full_join(gapminder, star_wars_dat, by="year") %>% distinct(year)
+# point out that you can use multiple filter statements if youwant, or you can put them all in one statement, same result. 
 
-# we have everything, and NAs are inserted for years where things don't exist
+years_to_keep <- c(2008:2012, 2015)
 
-right_join(gapminder, star_wars_dat, by="year") %>% distinct(year)
+ebird2 <- ebird %>%
+            filter(state %in% a_states,
+                  species %in% cool_birds) %>%
+            select(species, state, year, presence) %>%
+            filter(year %in% years_to_keep)
 
-# notice taht 1952, 2002, 2007 are missing, bc they don't exist in new_dat
+unique(ebird1$year)
+unique(ebird2$year)
 
-left_join(gapminder, star_wars_dat, by="year") %>% distinct(year)
+# 
+full_join(ebird1, ebird2, by=c("year","species","state")) %>% distinct(year)
 
-# notice that 2012 is missing, bc it doesn't exist in gapminder
+full_join(ebird1, ebird2, by=c("year","species","state")) %>% head()
 
-inner_join(gapminder, star_wars_dat, by="year") %>% distinct(year)
+# 
 
-# only things that are in common
+right_join(ebird1, ebird2, by=c("year","species","state")) %>% distinct(year)
+
+right_join(ebird1, ebird2, by=c("year","species","state")) %>% head()
+
+# 
+
+left_join(ebird1, ebird2, by=c("year","species","state")) %>% distinct(year)
+
+left_join(ebird1, ebird2, by=c("year","species","state")) %>% head()
+
+# 
+
+inner_join(ebird1, ebird2, by=c("year","species","state")) %>% distinct(year)
+
+inner_join(ebird1, ebird2, by=c("year","species","state")) %>% head()
 
 
-g1 <- gapminder %>% select(country, year)
 
-g2 <- gapminder %>% select(lifeExp, continent)
+g1 <- ebird %>% select(state, year)
+
+g2 <- ebird %>% select(samplesize, presence)
 
 
 gg <- cbind(g1, g2)
 gg <- bind_cols(g1, g2)
 
-rbind()
-bind_rows()
+# rbind()
+# bind_rows()
 
 
 #####################################
