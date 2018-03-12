@@ -7,7 +7,6 @@
 ### -- Necessary packages
 #######################################
 
-library(gapminder)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -16,8 +15,7 @@ library(ggplot2)
 ### -- Loading In The Data
 ####################
 
-data(gapminder)
-head(gapminder)   
+ebird <- read.csv("eBird_workshop.csv")
 
 # Explain What Pipes are %>% 
 
@@ -27,27 +25,27 @@ head(gapminder)
 ### -- Filtering
 #########################
 
-gdat <- gapminder %>%
-        filter(continent=='Europe',
-               year==1987)
+ebird %>%
+        filter(state=='AK',
+               year==2008)
 
 a = 100
 a <- 100
 
-gapminder %>%
-  filter(continent=='Europe',
-         year==1987) %>% 
-        select(country,lifeExp,gdpPercap)
+ebird %>%
+  filter(state=='AK',
+         year==2008) %>% 
+        select(state, samplesize, presence)
 
 # the "|" means 'or' in R
-gapminder %>%
-      filter(continent=="Europe"|continent=="Asia") %>%
+ebird %>%
+      filter(state=="AK"|state=="AZ") %>%
       # comments here 
-      distinct(continent)
+      distinct(state)
 
 # the "&" means "and" in R
-gapminder %>%
-          filter(year>=1987&year<=2002) %>% distinct(year)
+ebird %>%
+          filter(year>=2014&year<=2018) %>% distinct(year)
 
 #########################
 ### -- Match %in%   
