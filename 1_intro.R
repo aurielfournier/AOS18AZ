@@ -81,15 +81,17 @@ ebird %>%
 ### -- CHALLENGE
 #########################################
 
-# What is the median life expenctancy 
-# and population for each country in Asia 
+# What is the median samplesize and presence for 
+# Arizona, Alaska, Arkansas and Alabama after 2014?
 
-new_data <- gapminder %>% 
-  filter(continent == "Asia") %>% #distinct(continent)
-  group_by(country) %>%
-  summarise(medianL = median(lifeExp),
-            medianP = median(pop),
-            count = n())
+AStates <- c("AZ","AK","AR","AL")
+
+new_data <- ebird %>% 
+  filter(state %in% AStates,
+         year > 2014) %>% #distinct(continent)
+  group_by(state) %>%
+  summarise(medianS = median(samplesize),
+            medianP = median(presence))
 
 
 #note to self talk about Kiwi vs Us spelling
