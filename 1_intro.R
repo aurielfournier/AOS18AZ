@@ -199,28 +199,18 @@ gg <- bind_cols(g1, g2)
 ## CHALLENGE
 #####################################
 
-# Calculate the average life expectancy in 2002 
-# of 2 randomly selected countries for each continent. 
-# Then arrange the continent names in reverse order. \
-# Hint: Use the dplyr functions arrange() and sample_n(), 
+# Calculate the mean presence in 2010
+# of 2 randomly selected a_states 
+# Hint: Use the dplyr functions sample_n(), 
 # they have similar syntax to other dplyr functions.
-# ?arrange ?sample_n for help
+# ?sample_n for help
 
-gapminder %>%
-  filter(year==2002) %>%
-  group_by(continent) %>%
+ebird %>%
+  filter(year==2010,
+         state %in% a_states) %>%
+  group_by(state) %>%
   sample_n(2) %>%
-  group_by(continent) %>%
-  summarize(mean=mean(lifeExp)) %>%
-  arrange(., desc(continent))
-
-part1 <- gapminder %>%
-  filter(year==2002) %>%
-  group_by(continent) %>%
-  sample_n(2)
-
-part2 <- part1 %>% summarize(mean=mean(lifeExp)) %>%
-  arrange(., desc(continent))
+  summarize(mean=mean(presence))
 
 ########################
 ## Dates and Times
