@@ -104,9 +104,11 @@ new_data <- ebird %>%
 colors <- c("red","green")
 
 
-ebird %>%  
-  mutate(a_state = ifelse(state %in% a_states, 1, 0)) %>%
-  select(year, a_state, samplesize, presence, species) %>%
+mebird <- ebird %>%  
+  mutate(a_state = ifelse(state %in% a_states, 1, 0),
+         state_year = paste0(state,"_",year)) 
+
+mebird %>%
   tail()
   
 
@@ -115,20 +117,21 @@ ebird %>%
 ## Separate
 ########################
 
-mgap %>% 
-  separate(country_continent, 
+mebird %>% 
+  separate(state_year, 
            sep="_", 
-           into=c("country",
-                  "continent"),
-           remove=FALSE) 
+           into=c("state",
+                  "year"),
+           remove=FALSE) %>%
+  head()
 
 # or
 
-mgap %>% 
-  separate(year, sep=c(2,3), 
-           into=c("century","y1","y2")) %>%
-  mutate(century=as.numeric(century),
-         year = as.numeric(y1))
+mebird %>% 
+  separate(year, sep=c(2), 
+           into=c("century","endpart"),
+           remove=FALSE) %>%
+  head()
 
 ########################
 ## Joins
