@@ -135,10 +135,10 @@ function(){
 }
 
 #And now I need to break down and explain how functions in R work. And remember this is how all functions in R work. Every single thing you've used in R is a function. 
-Functions are a set of instructions (code) that gets performed inside its own box. When you put the function(){}
-Around it its putting itself into its own box, also called an environment. You can imagine the code
-put inside the function as just a set of instructions, like we just bought something from IKEA.
-We have to give it the building pieces as well. So for now weve large;y just grabbed an ikea box and threw a set of instructions inside. It will work but only for a single set of data. This is apparent when we clear the console. 
+#Functions are a set of instructions (code) that gets performed inside its own box. When you put the function(){}
+#Around it its putting itself into its own box, also called an environment. You can imagine the code
+#put inside the function as just a set of instructions, like we just bought something from IKEA.
+#We have to give it the building pieces as well. So for now weve large;y just grabbed an ikea box and threw a set of instructions inside. It will work but only for a single set of data. This is apparent when we clear the console. 
 
 my.fun<-function(){
   sd.data<-sd(x)
@@ -153,17 +153,17 @@ my.fun<-function(){
 
 my.fun()
 
-This doesnt do anything for a couple of reasons. But the obvious one is we never gave it our data. 
-This is where our arguments come in. And youre all very familiar with these. Lets open up a help file
+#This doesnt do anything for a couple of reasons. But the obvious one is we never gave it our data. 
+#This is where our arguments come in. And youre all very familiar with these. Lets open up a help file
 ?mean
-Arguments are how you put the building blocks inside our box so we can make something. 
-So in the mean code the important arguments are x, trim, and na.rm. When you see an equal sign 
-It means that is the default value, so if you never tell it what trim to do it will assume 0. If there
-is no equal sign then its a required variable and has no default. Like the x, which is the data. Now What the function does is run through its code and when it finds a variable the first place it looks is here in the arguments. And looks for where the function is. It then loads it into the environment. If it cant find it there, it looks in the global environement for the variable name. This is ofcourse dangerous and why we should define every variable carefully in our function, otherwise it will try to pull it from the global environemtn. And god knows whats in there.
+#Arguments are how you put the building blocks inside our box so we can make something. 
+#So in the mean code the important arguments are x, trim, and na.rm. When you see an equal sign 
+#It means that is the default value, so if you never tell it what trim to do it will assume 0. If there
+#is no equal sign then its a required variable and has no default. Like the x, which is the data. Now What the function does is run through its code and when it finds a variable the first place it looks is here in the arguments. And looks for where the function is. It then loads it into the environment. If it cant find it there, it looks in the global environement for the variable name. This is ofcourse dangerous and why we should define every variable carefully in our function, otherwise it will try to pull it from the global environemtn. And god knows whats in there.
 
-So lets give our function some arguments
-So what I really want this function to do is to calculate these things no matter what numbers I give it.
-So lets replace do that
+#So lets give our function some arguments
+#So what I really want this function to do is to calculate these things no matter what numbers I give it.
+#So lets do that
 
 my.fun<-function(x){
   sd.data<-sd(x)
@@ -179,11 +179,11 @@ my.fun<-function(x){
 my.fun(x=1:100)
 #ok now that didn't do anything. Does anyone know why? I assure its not because it didnt do what we wanted it to do.
 
-It didnt work because we never told it do a bunch fo stuff, but never told it what to give us back.
-It did all of its stuff, deleted the proudcts when it was done. which is effecient, but not every helpful.
-So all the end we have tell it to return something. If we dont tell it anything it will return the last thing
-printed to the console.
-You can either use return() or just tell it what to return
+#It didnt work because we never told it do a bunch fo stuff, but never told it what to give us back.
+#It did all of its stuff, deleted the proudcts when it was done. which is effecient, but not every helpful.
+#So all the end we have tell it to return something. If we dont tell it anything it will return the last thing
+#printed to the console.
+#You can either use return() or just tell it what to return
 
 my.fun<-function(x){
   sd.data<-sd(x)
@@ -197,14 +197,14 @@ my.fun<-function(x){
 }
 my.fun(x=1:100)
 
-This is the same as just typing it. Return it will just return no matter what. So you can get in a good habitat of using it but its not always necessary.
+#This is the same as just typing it. Return it will just return no matter what. So you can get in a good habitat of using it but its not always necessary.
 
-So our function works and it returns what we want it to no matter the numbers we give it. However theres a couple of things wrong with the function. Does anyone know one?
+#So our function works and it returns what we want it to no matter the numbers we give it. However theres a couple of things wrong with the function. Does anyone know one?
 
-Right this code doesnt actually calculate the confidence interval under every circumstance.
-Particularly the sem and tvalue part. Lets break up for like ten minutes and see if we can figure out how
-to have this calculate the n without us giving it to it. What I would suggest is not worrying about this in function form. I usually write it into a function at the very end so just paste this out.
-This is the first part of moving forward in R coding learning to problem solve and using R to help you.
+#Right this code doesnt actually calculate the confidence interval under every circumstance.
+#Particularly the sem and tvalue part. Lets break up for like ten minutes and see if we can figure out how
+#to have this calculate the n without us giving it to it. What I would suggest is not worrying about this in function form. I usually write it into a function at the very end so just paste this out.
+#This is the first part of moving forward in R coding learning to problem solve and using R to help you.
 #########33
 # Now there are a couple of ways to do this, but in this particular case there's one kind of right answer.
 
@@ -221,14 +221,15 @@ my.fun<-function(x){
 }
 my.fun(x=1:1000)
 
-And thats it. Weve made our first official function. That takes whatever input we give it and gives us the right answer.
+#And thats it. Weve made our first official function. That takes whatever input we give it and gives us the right answer.
 
-### break out and do something u
+### break out and do something
 
 temp_fun<-function(temp_values){
   d<-temp_values*9/5 + 32
 }
-What if we want to add an extra layer of complexity. 0.95 percent confidence interval is great and somewhat standard, but what if we want to change that level? How can we do that in our function. You cant open a function an edit it everytime you want to change something small. So we can make probability another variable. And this is very easy. And we can give it a default value.
+
+#What if we want to add an extra layer of complexity. 0.95 percent confidence interval is great and somewhat standard, but what if we want to change that level? How can we do that in our function. You cant open a function an edit it everytime you want to change something small. So we can make probability another variable. And this is very easy. And we can give it a default value.
 
 my.fun<-function(x,ci=0.95){
   sd.data<-sd(x)
@@ -245,18 +246,18 @@ my.fun(x=1:1000)
 
 ######
 
-### break out?????
+#break out?
 
 #teach print
-As you get farther into programming youll find it useful to print out messages. Either something like 'Hey im starting', or 'oops i stopped', 'or you messed up!'. And if you get tired of your favorite R functions giving you illogical error messages you can even start writing in your own error messages. 
+#As you get farther into programming youll find it useful to print out messages. Either something like 'Hey im starting', or 'oops i stopped', 'or you messed up!'. And if you get tired of your favorite R functions giving you illogical error messages you can even start writing in your own error messages. 
 
-The simple function to do this is print(). with fairly easy syntax
+#The simple function to do this is print(). with fairly easy syntax
 ?print
 print('hello')
 
-Whatever you put in quotes will be printed to the console. This is useful because it will print out while code is going, including inside functions and for loops. Meaning you can put in status messages
+#Whatever you put in quotes will be printed to the console. This is useful because it will print out while code is going, including inside functions and for loops. Meaning you can put in status messages
 
-for example
+#for example
 
 for(i in 1:100000000){
   if(i==1) {print('im thinking')}
@@ -268,29 +269,29 @@ my.fun1<-function(){
 }
 my.fun1()
 
-Theres a function that is very useful with the print function and gives a bit of an intro into more programming-esque functions. One of the first lessons is the If statement. This is part of the control structure of programming codes. They direct how codes are supposed to run. And are some of the fundamentals of programming.
+#Theres a function that is very useful with the print function and gives a bit of an intro into more programming-esque functions. One of the first lessons is the If statement. This is part of the control structure of programming codes. They direct how codes are supposed to run. And are some of the fundamentals of programming.
 
-An If statement reads like this, IF something is true or false then DO something specific. So  write it out. If I am hungry then I will eat. so If something was true, I am hungry, then I should DO something. 
+#An If statement reads like this, IF something is true or false then DO something specific. So  write it out. If I am hungry then I will eat. so If something was true, I am hungry, then I should DO something. 
 
-In R it works like this. 
+#In R it works like this. 
 if(TRUE){print('I did it')}
 if(FALSE){print('I did it')}
-So it splits out into two directions. And either does or doesnt do something. And this can be any statement as long as it makes a resulting statement that is either true or false
+#So it splits out into two directions. And either does or doesnt do something. And this can be any statement as long as it makes a resulting statement that is either true or false
 x<-1
 if(x==1){print('I did it')}
-x==2
+x<-2
 
 And while currently it doesnt do anything if its not true, you can make it do something if the statement is not true.
 
 if(TRUE){print('i did it')} else {'i didnt do it'}
 if(FALSE){print('i did it')} else {'i didnt do it'}
 
-So lets return to our confidence interval function. A rule in writing good code is to make it robust. It must work under all conditions given. Currently our function breaks under a certain scenario. Can anyone tell me when?
+#So lets return to our confidence interval function. A rule in writing good code is to make it robust. It must work under all conditions given. Currently our function breaks under a certain scenario. Can anyone tell me when?
 
-Right it breaks if you put a confidence interval that is greater than 1. Because this is illogical. And so what well do is have tell us that we inputted an incorrect value and then ofcourse not do the resulting function
+#Right it breaks if you put a confidence interval that is greater than 1. Because this is illogical. And so what well do is have tell us that we inputted an incorrect value and then ofcourse not do the resulting function
 
 
-So lets try that out in your code. to check the input of the confidence interval.
+#So lets try that out in your code. to check the input of the confidence interval.
 
 CI.fun<-function(data,ci){
   
@@ -308,16 +309,17 @@ CI.fun<-function(data,ci){
     return(list1)
   }}
 
+#
+#maybe teach next and stop, given time.
 
-
-###
+#
 #paste
-A very powerful tool in programming is the ability to create dynamic messages or outputs. For instance, in this code, what if we wanted to add to our error message and them them what Confidence interval they actual put in? You do this with paste. In other languages this is the same as concatenate. 
+#A very powerful tool in programming is the ability to create dynamic messages or outputs. For instance, in this code, what if we wanted to add to our error message and them them what Confidence interval they actual put in? You do this with paste. In other languages this is the same as concatenate. 
 
 ?paste
 ?paste0
 
-How these work is they 'paste' together whatever things you give it, exactly how you tell it to
+#How these work is they 'paste' together whatever things you give it, exactly how you tell it to
 
 paste0('hello')
 paste('hello','world')
@@ -326,28 +328,28 @@ paste0('hello',' world')
 paste('hello','world',sep='-')
 paste('hello','world','my name is',sep=' ')
 
-This becomes useful when you add in dynamic variables
+#This becomes useful when you add in dynamic variables
 i<-'the best'
 
 paste0('i am a: ',i)
 
-Paste is most useful with two things. Reading/writing in files and in concert with the print function.
-For instance say you have a set of data but is seperated by state. You could input:
+#Paste is most useful with two things. Reading/writing in files and in concert with the print function.
+#For instance say you have a set of data but is seperated by state. You could input:
   
   state<-'AZ'
   paste0('myfiles_',state,'.csv')
   read.csv(paste0('myfiles_',state,'.csv'))
   
-  So you can use this in for loops to load multiple files at once, or decide what to load.
+#So you can use this in for loops to load multiple files at once, or decide what to load.
   
-  Same with file saving
+#Same with file saving
   
   extension<-'final1'
   write.csv(data,paste0('myfiles_',extension,'.csv'))
   
-So returning to our function. We can have it print out our values if wed like.
-If you noticed in our print function, you can only tell it a very static set of things to print.
-With the combination of paste you can have it say different things depending on the input.
+#So returning to our function. We can have it print out our values if wed like.
+#If you noticed in our print function, you can only tell it a very static set of things to print.
+#With the combination of paste you can have it say different things depending on the input.
 
 ##################################
 
@@ -388,26 +390,26 @@ print(paste0('your upper bound is: (',upper, ') and your lower bound is: (', low
 list(upperbound=upper,lowerbound=lower,mean=mean.data)
   }}
 
-And weve basically created our function. And you can make these for anything you do often. To solve any problems you have. 
+#And weve basically created our function. And you can make these for anything you do often. To solve any problems you have. 
 
 ##ggtheme
-As mentioned earlier you can create one to load your own ggtheme after youve spent tireless hours creating it.
+#As mentioned earlier you can create one to load your own ggtheme after youve spent tireless hours creating it.
 
-mytheme<-function(){#Need to do this}
+mytheme<-function(){Need to do this}
   
 ggplot() + mytheme()
 ######
 #Source and loading 
-And as you grow these lists of functions youll want to save them and use them again easily. One of the easy ways to do this is to save them all in one code, and load that code into R when you need it.
+#And as you grow these lists of functions youll want to save them and use them again easily. One of the easy ways to do this is to save them all in one code, and load that code into R when you need it.
 
-For example I have a 'basics' sheet and it contains things I use all the time.
+#For example I have a 'basics' sheet and it contains things I use all the time.
 source('file:///C:/Users/birde/Dropbox/r_packages/radar2/R/basics.R')
 # Show link for how to make a package (not enough time to teach)
-The more advanced form of this is to create a package that contains all the functions you need, particularly if these functions are really long. THis is useful because you can hand packages over to collaborators, create help files, and even keep data sets in them.
+#The more advanced form of this is to create a package that contains all the functions you need, particularly if these functions are really long. THis is useful because you can hand packages over to collaborators, create help files, and even keep data sets in them.
 
-This is the blog I used to get me started in package writing. And it hasnt really changed much since then.
+#This is the blog I used to get me started in package writing. And it hasnt really changed much since then.
 
-https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/
+#https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/
 
   
 ### More we definitely wont have time to cover
@@ -543,16 +545,6 @@ for(i in 1:10){
 # use : for, if, print, and paste0
 # https://github.com/aurielfournier/naoc_2016_r_workshop
 
-values<-c(30,25,6)
-values<-sample(1:40,10)
-for(i in values){  d<-i*9/5 +32;  ifelse(d<50,print(paste0(d,' degrees is cold')),print(d))
-}
-
-for(i in values){
-  d<-i*9/5 +32
-  if(d<50){print(paste0(d,' degrees is cold'))}
-  if(d>50){print(paste0(d,' degrees is perfect'))}
-}
 
 
 #end of lesson
