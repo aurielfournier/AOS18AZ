@@ -1,4 +1,4 @@
-# Rules to function writing: Reproducible, robust, 
+# Rules to function writing: Reproducible, robust, vectorize if possible
 #Function writing
 # There's a couple of reasons learning functions is helpful. One you can write your own common functions. two you can better understand how to troubleshoot your code and other peoples functions. Three the principles of function writing teach us more about good coding tips to learn including reproduciability.  
 # What is a function and why is it necessary in R
