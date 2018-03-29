@@ -3,13 +3,12 @@
 
 # If you have any difficulties let Auriel and Matt know!
 
-install.packages(c("gapminder","tidyr","dplyr",
+install.packages(c("tidyr","dplyr",
                    "ggplot2",'ggthemes',"RColorBrewer",
                    "gridExtra"))
 
 # to make sure everything installed correctly run these lines
 
-library(gapminder)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
