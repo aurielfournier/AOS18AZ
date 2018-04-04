@@ -1,13 +1,15 @@
-# Rules to function writing: Reproducible, robust, vectorize if possible
-#Function writing
+
+#Function writing, why learn it?
 # There's a couple of reasons learning functions is helpful. One you can write your own common functions. two you can better understand how to troubleshoot your code and other peoples functions. Three the principles of function writing teach us more about good coding tips to learn including reproduciability.  
 # What is a function and why is it necessary in R
-
+# A function lets you package code into one unit that doesnt need to be loaded multiple times, or rewritten.
 sem<-function(x,na.rm=T){sd(x,na.rm=na.rm)/sqrt(length(x))}
 
 data<-sample.int(100,10,replace=T)
 
 c(hi=mean(data) + sem(data),lo= mean(data) - sem(data),mean=mean(data))
+
+#And we can create a list of all these functions, so we never have to write them again, just load them. And we'll show you how to do this today.
 
 # A function is the functional unit in R. R is built around vectorization and function writing.
 # Once you understand this you'll get better at understanding why R does things the way it does them. And be able to fix functions or use them for your own troubleshooting
@@ -42,6 +44,7 @@ sd(x)
 # but why do this?
 # 1. It's much cleaner. Typing sd() and not having anyone worry about the underlying stuff can be good for readability and user interfacing
 # 2. It's reproduciable, and no one can mess with the function. This code will work everytime the way its supposed to, there's no accidently messing up the code. You can hand this to someone and it will always work. And then hark back to #1
+# 3. Much easier to give finished product to collaborator or someone with lower R understanding. Including package building
 # 3. It's actually more memory friendly. Lets actually look at that. Here's a function.
 # say we wanted to find the range of a vector. A post the maxinum, minimum, and range. How might we do that.
 min.num<-min(x)
@@ -70,11 +73,11 @@ x<-sample.int(100,100,replace=T)
 x
 range.function(x)
 
-# This can be very important when you have a really long code. R does create these inbetweens but then deletes them. It never gets stored in memory, you never know its happening, and it disappears.
+# This can be very important when you have a really long code. R does create these inbetweens but then deletes them. It never gets stored long term in memory, you never know its happening, and it disappears.
 
 #One reason this might be important is when you're working with really large datasets. R actually has a whole suite of rules and functions to deal with memory isssues. And these will not get auto-triggered while just working in the console here. 
 
-#4. Never rewrite code again. And this is mainly what we'll deal with today.
+#5. Never rewrite code again. And this is mainly what we'll deal with today.
 # R has two important tips. Vectorize things if you can, if you use a line of code more than once store it in an object or function.
 
 # Lets break out and see if we can solve a problem and then we'll try to create a function from it
@@ -93,7 +96,7 @@ sd/sqrt(n) * tvalue (df) +/- mean    #heres what we need to do
 # Is to bring things into pieces and slowly go through it. Don't think of how to solve the whole problem
 # Think of how to do the individual parts. If you run into an issue in the middle so be it.
 # So split this equation in 3 parts (or more) and try to do them individualy.
-#Take perhaps 15 minutes and see if you can write some code that converts the data into 3 numbers, the lower bound, the upper bound, and the mean.
+#Take perhaps 15 minutes and see if you can write some code that converts the data into 3 numbers, the lower bound, the upper bound, and the mean. It doesnt matter how you decide to display the output
 
 
 # 15 minute break
@@ -102,15 +105,13 @@ sd/sqrt(n) * tvalue (df) +/- mean    #heres what we need to do
 qt(p=0.95,df=10)
 # we should break it down into it's pieces and figure out how to do them one by one
 
-sd.data<-sd(data)   #this function calculates the standard deviation, whew that was easy
-
-n<-10
+sd.data<-sd(data)   #this function calculates the standard deviation
 
 sem<-sd.data/10    # put them together. And there we go, we have sd/sqrt(n) also known as the standard error of the mean (sem)
 
 #with some googling (or just using the help section) you can figure out that the function qt gives us the t value as long
 # as we also give it the degrees of freedom (which is n-1) and the confidence interval (ci)
-tvalue<-qt(ci,(length(data)-1))   ###with that we can write this  
+tvalue<-qt(ci,(10-1))   ###with that we can write this  
 
 mean.data<-mean(data)   ##the mean can be calculated with the mean function
 sem*tvalue   ##gives us our interval
@@ -125,8 +126,8 @@ lower<-mean.data - sem*tvalue   ## our lower
 function(){
   sd.data<-sd(x)
   n<-length(x) 
-  sem<-sd.data/n  
-  tvalue<-qt(ci,(length(x)-1))
+  sem<-sd.data/10  
+  tvalue<-qt(ci,(10-1))
   mean.data<-mean(x)
   sem*tvalue
   upper<-mean.data + sem*tvalue
@@ -138,18 +139,18 @@ function(){
 #Functions are a set of instructions (code) that gets performed inside its own box. When you put the function(){}
 #Around it its putting itself into its own box, also called an environment. You can imagine the code
 #put inside the function as just a set of instructions, like we just bought something from IKEA.
-#We have to give it the building pieces as well. So for now weve large;y just grabbed an ikea box and threw a set of instructions inside. It will work but only for a single set of data. This is apparent when we clear the console. 
+#We have to give it the building pieces as well. So for now weve largely just grabbed an ikea box and threw a set of instructions inside. It will work but only for a single set of data. This is apparent when we clear the console. 
 
 my.fun<-function(){
   sd.data<-sd(x)
-  n<-length(x) 
-  sem<-sd.data/n  
-  tvalue<-qt(ci,(length(x)-1))
+  sem<-sd.data/10 
+  tvalue<-qt(0.95,(10-1))
   mean.data<-mean(x)
   sem*tvalue
   upper<-mean.data + sem*tvalue
   lower<-mean.data - sem*tvalue
-}
+print(upper)
+  }
 
 my.fun()
 
@@ -159,7 +160,7 @@ my.fun()
 #Arguments are how you put the building blocks inside our box so we can make something. 
 #So in the mean code the important arguments are x, trim, and na.rm. When you see an equal sign 
 #It means that is the default value, so if you never tell it what trim to do it will assume 0. If there
-#is no equal sign then its a required variable and has no default. Like the x, which is the data. Now What the function does is run through its code and when it finds a variable the first place it looks is here in the arguments. And looks for where the function is. It then loads it into the environment. If it cant find it there, it looks in the global environement for the variable name. This is ofcourse dangerous and why we should define every variable carefully in our function, otherwise it will try to pull it from the global environemtn. And god knows whats in there.
+#is no equal sign then its a required variable and has no default. Like the x, which is the data. Now What the function does is run through its code and when it finds a variable the first place it looks is here in the arguments. And looks for where the function is. It then loads it into the environment.
 
 #So lets give our function some arguments
 #So what I really want this function to do is to calculate these things no matter what numbers I give it.
@@ -167,9 +168,8 @@ my.fun()
 
 my.fun<-function(x){
   sd.data<-sd(x)
-  n<-length(x) 
-  sem<-sd.data/n  
-  tvalue<-qt(0.95,(length(x)-1))
+  sem<-sd.data/10  
+  tvalue<-qt(0.95,(10-1))
   mean.data<-mean(x)
   sem*tvalue
   upper<-mean.data + sem*tvalue
@@ -180,7 +180,7 @@ my.fun(x=1:100)
 #ok now that didn't do anything. Does anyone know why? I assure its not because it didnt do what we wanted it to do.
 
 #It didnt work because we never told it do a bunch fo stuff, but never told it what to give us back.
-#It did all of its stuff, deleted the proudcts when it was done. which is effecient, but not every helpful.
+#It did all of its stuff, deleted the products when it was done. which is effecient, but not every helpful.
 #So all the end we have tell it to return something. If we dont tell it anything it will return the last thing
 #printed to the console.
 #You can either use return() or just tell it what to return
@@ -224,9 +224,9 @@ my.fun(x=1:1000)
 #And thats it. Weve made our first official function. That takes whatever input we give it and gives us the right answer.
 
 ### break out and do something
-
+# I want to create a function that converts farenheit measurements to celsius. Lets see if we can do that real quick
 temp_fun<-function(temp_values){
-  d<-temp_values*9/5 + 32
+  (temp_values-32)*5/9
 }
 
 #What if we want to add an extra layer of complexity. 0.95 percent confidence interval is great and somewhat standard, but what if we want to change that level? How can we do that in our function. You cant open a function an edit it everytime you want to change something small. So we can make probability another variable. And this is very easy. And we can give it a default value.
@@ -245,9 +245,7 @@ my.fun<-function(x,ci=0.95){
 my.fun(x=1:1000)
 
 ######
-
-#break out?
-
+# What we start learning now are functions that are useful not just for our funciton writing but for your future codes in general.
 #teach print
 #As you get farther into programming youll find it useful to print out messages. Either something like 'Hey im starting', or 'oops i stopped', 'or you messed up!'. And if you get tired of your favorite R functions giving you illogical error messages you can even start writing in your own error messages. 
 
@@ -377,7 +375,7 @@ CI.fun<-function(data,ci){
 
 CI.fun<-function(data,ci){
   
-  if(ci>1){print(paste0("You can't have a probability greater than 1 you goof! You entered: ",ci)}else{
+  if(ci>1){print(paste0("You can't have a probability greater than 1 you goof! You entered: ",ci))}else{
     
     sd.data<-sd(data)
     n<-length(data)
@@ -399,17 +397,34 @@ mytheme<-function(){Need to do this}
   
 ggplot() + mytheme()
 ######
+#A final example maybe?
+#
+
 #Source and loading 
 #And as you grow these lists of functions youll want to save them and use them again easily. One of the easy ways to do this is to save them all in one code, and load that code into R when you need it.
 
 #For example I have a 'basics' sheet and it contains things I use all the time.
-source('file:///C:/Users/birde/Dropbox/r_packages/radar2/R/basics.R')
+source('file:C:/Users/birde/Dropbox/r_packages/radar2/R/basics.R')
 # Show link for how to make a package (not enough time to teach)
 #The more advanced form of this is to create a package that contains all the functions you need, particularly if these functions are really long. THis is useful because you can hand packages over to collaborators, create help files, and even keep data sets in them.
+
+#Let me show you
+library(devtools)
+?load.local
+#Load will load the package like source, but wont load the help files
+load_all('C:/Users/birde/Dropbox/r_packages/radar2')
+#Once you install it will load the help files
+install('C:/Users/birde/Dropbox/r_packages/radar2')
+?geom
+?beamht_std
+geom
+
+beamht_std
 
 #This is the blog I used to get me started in package writing. And it hasnt really changed much since then.
 
 #https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/
+
 
   
 ### More we definitely wont have time to cover
@@ -533,18 +548,5 @@ for(i in 1:10){
 ##-Exceptions are when a function can not be vectorized or when referencing previous values
 ##-Also for lowering memory usage 
 #(If your files exceed 1.5gb looping or other packages may be requried)
-
-###############################
-# Task
-#Here is a set of values. I want you to write a for loop that converts these to Farenheit 
-# and then prints out whether this value is cold depending on if the resulting value is less 
-# than 50 degrees farenheit. 
-# this is because Matt, who wrote this, is from Texas, and hates cold
-# The function for this conversion is 
-# C*(9/5) +32
-# use : for, if, print, and paste0
-# https://github.com/aurielfournier/naoc_2016_r_workshop
-
-
 
 #end of lesson
