@@ -1,4 +1,3 @@
-
 #Function writing, why learn it?
 # There's a couple of reasons learning functions is helpful. One you can write your own common functions. two you can better understand how to troubleshoot your code and other peoples functions. Three the principles of function writing teach us more about good coding tips to learn including reproduciability.  
 # What is a function and why is it necessary in R
@@ -42,10 +41,10 @@ sqrt(var(x))
 sd(x)
 
 # but why do this?
-# 1. It's much cleaner. Typing sd() and not having anyone worry about the underlying stuff can be good for readability and user interfacing
+# 1. It's much cleaner. Typing sd() and not having anyone worry about the underlying stuff can be good for readability.
 # 2. It's reproduciable, and no one can mess with the function. This code will work everytime the way its supposed to, there's no accidently messing up the code. You can hand this to someone and it will always work. And then hark back to #1
 # 3. Much easier to give finished product to collaborator or someone with lower R understanding. Including package building
-# 3. It's actually more memory friendly. Lets actually look at that. Here's a function.
+# 4. It's actually more memory friendly. Lets actually look at that. Here's a function.
 # say we wanted to find the range of a vector. A post the maxinum, minimum, and range. How might we do that.
 min.num<-min(x)
 max.num<-max(x)
@@ -62,7 +61,7 @@ range<-max.num-min.num
 
 c(minimum=min.num,maximum=max.num,range=range)
 }
-
+x<-c(1:100)
 range.function
 
 range.function(x)
@@ -107,11 +106,11 @@ qt(p=0.95,df=10)
 
 sd.data<-sd(data)   #this function calculates the standard deviation
 
-sem<-sd.data/10    # put them together. And there we go, we have sd/sqrt(n) also known as the standard error of the mean (sem)
+sem<-sd.data/sqrt(10)    # put them together. And there we go, we have sd/sqrt(n) also known as the standard error of the mean (sem)
 
 #with some googling (or just using the help section) you can figure out that the function qt gives us the t value as long
 # as we also give it the degrees of freedom (which is n-1) and the confidence interval (ci)
-tvalue<-qt(ci,(10-1))   ###with that we can write this  
+tvalue<-qt(0.95,(10-1))   ###with that we can write this  
 
 mean.data<-mean(data)   ##the mean can be calculated with the mean function
 sem*tvalue   ##gives us our interval
@@ -120,8 +119,8 @@ upper<-mean.data + sem*tvalue   ##putting it all together, this gives us our upp
 lower<-mean.data - sem*tvalue   ## our lower
 
 ##############################
-# Ok now that we have all our pieces. How can we fit this into a function?
-# Well actually quite easy. 50% of it is just putting the words function around it
+# Ok now that we have all our pieces. How can we fit this into a function? 
+# Well actually quite easy. 75% of it is just figuring out how to solve the problem in a code form. 
 
 function(){
   sd.data<-sd(x)
@@ -149,11 +148,11 @@ my.fun<-function(){
   sem*tvalue
   upper<-mean.data + sem*tvalue
   lower<-mean.data - sem*tvalue
-print(upper)
+  
   }
 
 my.fun()
-
+my.fun
 #This doesnt do anything for a couple of reasons. But the obvious one is we never gave it our data. 
 #This is where our arguments come in. And youre all very familiar with these. Lets open up a help file
 ?mean
@@ -165,7 +164,7 @@ my.fun()
 #So lets give our function some arguments
 #So what I really want this function to do is to calculate these things no matter what numbers I give it.
 #So lets do that
-
+# This variable name can be whatever we want, just whenever it sees that variable in the code it will attempt to load it from what we gave it. It looks in its own environment first, then our argument list, after that it looks in the global environment (VERY BAD)
 my.fun<-function(x){
   sd.data<-sd(x)
   sem<-sd.data/10  
@@ -200,14 +199,14 @@ my.fun(x=1:100)
 #This is the same as just typing it. Return it will just return no matter what. So you can get in a good habitat of using it but its not always necessary.
 
 #So our function works and it returns what we want it to no matter the numbers we give it. However theres a couple of things wrong with the function. Does anyone know one?
-
+#Robust and reproducible
 #Right this code doesnt actually calculate the confidence interval under every circumstance.
 #Particularly the sem and tvalue part. Lets break up for like ten minutes and see if we can figure out how
 #to have this calculate the n without us giving it to it. What I would suggest is not worrying about this in function form. I usually write it into a function at the very end so just paste this out.
 #This is the first part of moving forward in R coding learning to problem solve and using R to help you.
 #########33
 # Now there are a couple of ways to do this, but in this particular case there's one kind of right answer.
-
+# Making the code robust means it needs to calculate as much as possible without input
 my.fun<-function(x){
   sd.data<-sd(x)
   n<-length(x) 
@@ -245,13 +244,13 @@ my.fun<-function(x,ci=0.95){
 my.fun(x=1:1000)
 
 ######
-# What we start learning now are functions that are useful not just for our funciton writing but for your future codes in general.
+# What we start learning now are functions that are useful not just for our function writing but for your future codes in general.
 #teach print
 #As you get farther into programming youll find it useful to print out messages. Either something like 'Hey im starting', or 'oops i stopped', 'or you messed up!'. And if you get tired of your favorite R functions giving you illogical error messages you can even start writing in your own error messages. 
 
 #The simple function to do this is print(). with fairly easy syntax
 ?print
-print('hello')
+print(i)
 
 #Whatever you put in quotes will be printed to the console. This is useful because it will print out while code is going, including inside functions and for loops. Meaning you can put in status messages
 
@@ -259,7 +258,10 @@ print('hello')
 
 for(i in 1:100000000){
   if(i==1) {print('im thinking')}
+  # do some stuff
   if(i==100000000/2) {print('im thinking hard')}
+  # do some more stuff
+  if(i==100000000){print('im done')}
 }
 
 my.fun1<-function(){
@@ -279,13 +281,13 @@ x<-1
 if(x==1){print('I did it')}
 x<-2
 
-And while currently it doesnt do anything if its not true, you can make it do something if the statement is not true.
+#And while currently it doesnt do anything if its not true, you can make it do something if the statement is not true.
 
 if(TRUE){print('i did it')} else {'i didnt do it'}
 if(FALSE){print('i did it')} else {'i didnt do it'}
 
 #So lets return to our confidence interval function. A rule in writing good code is to make it robust. It must work under all conditions given. Currently our function breaks under a certain scenario. Can anyone tell me when?
-
+#Robust and Reproducible
 #Right it breaks if you put a confidence interval that is greater than 1. Because this is illogical. And so what well do is have tell us that we inputted an incorrect value and then ofcourse not do the resulting function
 
 
@@ -316,7 +318,9 @@ CI.fun<-function(data,ci){
 
 ?paste
 ?paste0
-
+x<-'matt'
+paste0('hello','my','name','is',x)
+paste('hello','my','name','is',x)
 #How these work is they 'paste' together whatever things you give it, exactly how you tell it to
 
 paste0('hello')
@@ -335,6 +339,8 @@ paste0('i am a: ',i)
 #For instance say you have a set of data but is seperated by state. You could input:
   
   state<-'AZ'
+  paste0('myfiles_',state,'.csv')
+  state<-c('AZ','TX')
   paste0('myfiles_',state,'.csv')
   read.csv(paste0('myfiles_',state,'.csv'))
   
@@ -388,7 +394,11 @@ print(paste0('your upper bound is: (',upper, ') and your lower bound is: (', low
 list(upperbound=upper,lowerbound=lower,mean=mean.data)
   }}
 
-#And weve basically created our function. And you can make these for anything you do often. To solve any problems you have. 
+#And weve basically created our function. And you can make these for anything you do often. To solve any problems you have.
+# Not every situation is 
+# Troubleshooting, its defintely an end game
+# Changed inputs. 
+# Sharing
 
 ##ggtheme
 #As mentioned earlier you can create one to load your own ggtheme after youve spent tireless hours creating it.
@@ -399,7 +409,6 @@ ggplot() + mytheme()
 ######
 #A final example maybe?
 #
-
 #Source and loading 
 #And as you grow these lists of functions youll want to save them and use them again easily. One of the easy ways to do this is to save them all in one code, and load that code into R when you need it.
 
@@ -550,3 +559,4 @@ for(i in 1:10){
 #(If your files exceed 1.5gb looping or other packages may be requried)
 
 #end of lesson
+
